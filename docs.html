@@ -387,7 +387,7 @@
             </div>
             <div class="form-group">
                 <label class="form-label">Base URL</label>
-                <input type="text" id="baseUrl" class="form-input" value="http://localhost:8000"/>
+                <input type="text" id="baseUrl" class="form-input" value="https://colorforge-api.deno.dev"/>
             </div>
         </div>
     </div>
@@ -421,7 +421,7 @@
                         <span class="code-lang">CURL</span>
                     </div>
                     <span class="syntax-keyword">curl</span> -X GET \
-                    <span class="syntax-string">"http://localhost:8000/v1/ping"</span> \
+                    <span class="syntax-string">"https://colorforge-api.deno.dev/v1/ping"</span> \
                     -H <span class="syntax-string">"X-OpenAI-Key: YOUR_API_KEY"</span>
                 </div>
             </div>
@@ -433,7 +433,7 @@
                         <span class="code-lang">JAVASCRIPT</span>
                     </div>
                     <pre><span class="syntax-keyword">const</span> response = <span class="syntax-keyword">await</span> fetch(<span
-                            class="syntax-string">'http://localhost:8000/v1/ping'</span>, {
+                            class="syntax-string">'https://colorforge-api.deno.dev/v1/ping'</span>, {
   method: <span class="syntax-string">'GET'</span>,
   headers: {
     <span class="syntax-string">'X-OpenAI-Key'</span>: <span class="syntax-string">'YOUR_API_KEY'</span>
@@ -457,7 +457,7 @@ console.log(data);</pre>
 }
 
 <span class="syntax-keyword">const</span> response = <span class="syntax-keyword">await</span> fetch(<span
-                                class="syntax-string">'http://localhost:8000/v1/ping'</span>, {
+                                class="syntax-string">'https://colorforge-api.deno.dev/v1/ping'</span>, {
   method: <span class="syntax-string">'GET'</span>,
   headers: {
     <span class="syntax-string">'X-OpenAI-Key'</span>: <span class="syntax-string">'YOUR_API_KEY'</span>
@@ -517,7 +517,7 @@ console.log(data);</pre>
                         <span class="code-lang">CURL</span>
                     </div>
                     <span class="syntax-keyword">curl</span> -X POST \
-                    <span class="syntax-string">"http://localhost:8000/v1/generate"</span> \
+                    <span class="syntax-string">"https://colorforge-api.deno.dev/v1/generate"</span> \
                     -H <span class="syntax-string">"Content-Type: application/json"</span> \
                     -H <span class="syntax-string">"X-OpenAI-Key: YOUR_API_KEY"</span> \
                     -d <span class="syntax-string">'{
@@ -535,7 +535,7 @@ console.log(data);</pre>
                         <span class="code-lang">JAVASCRIPT</span>
                     </div>
                     <pre><span class="syntax-keyword">const</span> response = <span class="syntax-keyword">await</span> fetch(<span
-                            class="syntax-string">'http://localhost:8000/v1/generate'</span>, {
+                            class="syntax-string">'https://colorforge-api.deno.dev/v1/generate'</span>, {
   method: <span class="syntax-string">'POST'</span>,
   headers: {
     <span class="syntax-string">'Content-Type'</span>: <span class="syntax-string">'application/json'</span>,
@@ -577,7 +577,7 @@ console.log(data.results);</pre>
 };
 
 <span class="syntax-keyword">const</span> response = <span class="syntax-keyword">await</span> fetch(<span
-                                class="syntax-string">'http://localhost:8000/v1/generate'</span>, {
+                                class="syntax-string">'https://colorforge-api.deno.dev/v1/generate'</span>, {
   method: <span class="syntax-string">'POST'</span>,
   headers: {
     <span class="syntax-string">'Content-Type'</span>: <span class="syntax-string">'application/json'</span>,
@@ -632,7 +632,7 @@ console.log(data.results);</pre>
                         <span class="code-lang">CURL</span>
                     </div>
                     <span class="syntax-keyword">curl</span> -X POST \
-                    <span class="syntax-string">"http://localhost:8000/v1/edit"</span> \
+                    <span class="syntax-string">"https://colorforge-api.deno.dev/v1/edit"</span> \
                     -H <span class="syntax-string">"Content-Type: application/json"</span> \
                     -H <span class="syntax-string">"X-OpenAI-Key: YOUR_API_KEY"</span> \
                     -d <span class="syntax-string">'{
@@ -650,7 +650,7 @@ console.log(data.results);</pre>
                     </div>
                     <span class="syntax-keyword">const</span> response = <span class="syntax-keyword">await</span> <span
                         class="syntax-keyword">fetch</span>(<span
-                        class="syntax-string">'http://localhost:8000/v1/edit'</span>, {
+                        class="syntax-string">'https://colorforge-api.deno.dev/v1/edit'</span>, {
                     <span class="syntax-keyword">method:</span> <span class="syntax-string">'POST'</span>,
                     <span class="syntax-keyword">headers:</span> {
                     <span class="syntax-string">'Content-Type'</span>: <span
@@ -692,7 +692,7 @@ console.log(data.results);</pre>
 
                     <span class="syntax-keyword">const</span> response = <span class="syntax-keyword">await</span> <span
                         class="syntax-keyword">fetch</span>(<span
-                        class="syntax-string">'http://localhost:8000/v1/edit'</span>, {
+                        class="syntax-string">'https://colorforge-api.deno.dev/v1/edit'</span>, {
                     <span class="syntax-keyword">method:</span> <span class="syntax-string">'POST'</span>,
                     <span class="syntax-keyword">headers:</span> {
                     <span class="syntax-string">'Content-Type'</span>: <span
@@ -749,7 +749,7 @@ console.log(data.results);</pre>
                         <span class="code-lang">CURL</span>
                     </div>
                     <span class="syntax-keyword">curl</span> -X POST \
-                    <span class="syntax-string">"http://localhost:8000/v1/recolor"</span> \
+                    <span class="syntax-string">"https://colorforge-api.deno.dev/v1/recolor"</span> \
                     -H <span class="syntax-string">"Content-Type: application/json"</span> \
                     -H <span class="syntax-string">"X-OpenAI-Key: YOUR_API_KEY"</span> \
                     -d <span class="syntax-string">'{
@@ -766,7 +766,7 @@ console.log(data.results);</pre>
                         <span class="code-lang">JAVASCRIPT</span>
                     </div>
                     <span class="syntax-keyword">const</span> response = <span class="syntax-keyword">await</span> <span
-                        class="syntax-keyword">fetch</span>(<span class="syntax-string">'http://localhost:8000/v1/recolor'</span>,
+                        class="syntax-keyword">fetch</span>(<span class="syntax-string">'https://colorforge-api.deno.dev/v1/recolor'</span>,
                     {
                     <span class="syntax-keyword">method:</span> <span class="syntax-string">'POST'</span>,
                     <span class="syntax-keyword">headers:</span> {
@@ -808,7 +808,7 @@ console.log(data.results);</pre>
                     };
 
                     <span class="syntax-keyword">const</span> response = <span class="syntax-keyword">await</span> <span
-                        class="syntax-keyword">fetch</span>(<span class="syntax-string">'http://localhost:8000/v1/recolor'</span>,
+                        class="syntax-keyword">fetch</span>(<span class="syntax-string">'https://colorforge-api.deno.dev/v1/recolor'</span>,
                     {
                     <span class="syntax-keyword">method:</span> <span class="syntax-string">'POST'</span>,
                     <span class="syntax-keyword">headers:</span> {
@@ -866,7 +866,7 @@ console.log(data.results);</pre>
                         <span class="code-lang">CURL</span>
                     </div>
                     <span class="syntax-keyword">curl</span> -X POST \
-                    <span class="syntax-string">"http://localhost:8000/v1/visualize"</span> \
+                    <span class="syntax-string">"https://colorforge-api.deno.dev/v1/visualize"</span> \
                     -H <span class="syntax-string">"Content-Type: application/json"</span> \
                     -H <span class="syntax-string">"X-OpenAI-Key: YOUR_API_KEY"</span> \
                     -d <span class="syntax-string">'{
@@ -883,7 +883,7 @@ console.log(data.results);</pre>
                         <span class="code-lang">JAVASCRIPT</span>
                     </div>
                     <span class="syntax-keyword">const</span> response = <span class="syntax-keyword">await</span> <span
-                        class="syntax-keyword">fetch</span>(<span class="syntax-string">'http://localhost:8000/v1/visualize'</span>,
+                        class="syntax-keyword">fetch</span>(<span class="syntax-string">'https://colorforge-api.deno.dev/v1/visualize'</span>,
                     {
                     <span class="syntax-keyword">method:</span> <span class="syntax-string">'POST'</span>,
                     <span class="syntax-keyword">headers:</span> {
@@ -925,7 +925,7 @@ console.log(data.results);</pre>
                     };
 
                     <span class="syntax-keyword">const</span> response = <span class="syntax-keyword">await</span> <span
-                        class="syntax-keyword">fetch</span>(<span class="syntax-string">'http://localhost:8000/v1/visualize'</span>,
+                        class="syntax-keyword">fetch</span>(<span class="syntax-string">'https://colorforge-api.deno.dev/v1/visualize'</span>,
                     {
                     <span class="syntax-keyword">method:</span> <span class="syntax-string">'POST'</span>,
                     <span class="syntax-keyword">headers:</span> {
@@ -972,7 +972,7 @@ console.log(data.results);</pre>
                         <span class="code-lang">CURL</span>
                     </div>
                     <span class="syntax-keyword">curl</span> -X GET \
-                    <span class="syntax-string">"http://localhost:8000/v1/palettes"</span> \
+                    <span class="syntax-string">"https://colorforge-api.deno.dev/v1/palettes"</span> \
                     -H <span class="syntax-string">"X-OpenAI-Key: YOUR_API_KEY"</span>
                 </div>
             </div>
@@ -984,7 +984,7 @@ console.log(data.results);</pre>
                         <span class="code-lang">JAVASCRIPT</span>
                     </div>
                     <span class="syntax-keyword">const</span> response = <span class="syntax-keyword">await</span> <span
-                        class="syntax-keyword">fetch</span>(<span class="syntax-string">'http://localhost:8000/v1/palettes'</span>,
+                        class="syntax-keyword">fetch</span>(<span class="syntax-string">'https://colorforge-api.deno.dev/v1/palettes'</span>,
                     {
                     <span class="syntax-keyword">method:</span> <span class="syntax-string">'GET'</span>,
                     <span class="syntax-keyword">headers:</span> {
@@ -1012,7 +1012,7 @@ console.log(data.results);</pre>
                     }
 
                     <span class="syntax-keyword">const</span> response = <span class="syntax-keyword">await</span> <span
-                        class="syntax-keyword">fetch</span>(<span class="syntax-string">'http://localhost:8000/v1/palettes'</span>,
+                        class="syntax-keyword">fetch</span>(<span class="syntax-string">'https://colorforge-api.deno.dev/v1/palettes'</span>,
                     {
                     <span class="syntax-keyword">method:</span> <span class="syntax-string">'GET'</span>,
                     <span class="syntax-keyword">headers:</span> {
@@ -1077,7 +1077,7 @@ console.log(data.results);</pre>
                         <span class="code-lang">CURL</span>
                     </div>
                     <span class="syntax-keyword">curl</span> -X POST \
-                    <span class="syntax-string">"http://localhost:8000/v1/batch"</span> \
+                    <span class="syntax-string">"https://colorforge-api.deno.dev/v1/batch"</span> \
                     -H <span class="syntax-string">"Content-Type: application/json"</span> \
                     -H <span class="syntax-string">"X-OpenAI-Key: YOUR_API_KEY"</span> \
                     -d <span class="syntax-string">'{
@@ -1124,7 +1124,7 @@ console.log(data.results);</pre>
 
                     <span class="syntax-keyword">const</span> response = <span class="syntax-keyword">await</span> <span
                         class="syntax-keyword">fetch</span>(<span
-                        class="syntax-string">'http://localhost:8000/v1/batch'</span>, {
+                        class="syntax-string">'https://colorforge-api.deno.dev/v1/batch'</span>, {
                     <span class="syntax-keyword">method:</span> <span class="syntax-string">'POST'</span>,
                     <span class="syntax-keyword">headers:</span> {
                     <span class="syntax-string">'Content-Type'</span>: <span
@@ -1181,7 +1181,7 @@ console.log(data.results);</pre>
 
                     <span class="syntax-keyword">const</span> response = <span class="syntax-keyword">await</span> <span
                         class="syntax-keyword">fetch</span>(<span
-                        class="syntax-string">'http://localhost:8000/v1/batch'</span>, {
+                        class="syntax-string">'https://colorforge-api.deno.dev/v1/batch'</span>, {
                     <span class="syntax-keyword">method:</span> <span class="syntax-string">'POST'</span>,
                     <span class="syntax-keyword">headers:</span> {
                     <span class="syntax-string">'Content-Type'</span>: <span
@@ -1233,7 +1233,7 @@ console.log(data.results);</pre>
                         <span class="code-lang">CURL</span>
                     </div>
                     <span class="syntax-keyword">curl</span> -X GET \
-                    <span class="syntax-string">"http://localhost:8000/v1/jobs/job_abc123def456"</span> \
+                    <span class="syntax-string">"https://colorforge-api.deno.dev/v1/jobs/job_abc123def456"</span> \
                     -H <span class="syntax-string">"X-OpenAI-Key: YOUR_API_KEY"</span>
                 </div>
             </div>
@@ -1248,7 +1248,7 @@ console.log(data.results);</pre>
                         class="syntax-string">'job_abc123def456'</span>;
 
                     <span class="syntax-keyword">const</span> response = <span class="syntax-keyword">await</span> <span
-                        class="syntax-keyword">fetch</span>(`http://localhost:8000/v1/jobs/${jobId}`, {
+                        class="syntax-keyword">fetch</span>(`https://colorforge-api.deno.dev/v1/jobs/${jobId}`, {
                     <span class="syntax-keyword">method:</span> <span class="syntax-string">'GET'</span>,
                     <span class="syntax-keyword">headers:</span> {
                     <span class="syntax-string">'X-OpenAI-Key'</span>: <span class="syntax-string">'YOUR_API_KEY'</span>
@@ -1280,7 +1280,7 @@ console.log(data.results);</pre>
                         class="syntax-string">'job_abc123def456'</span>;
 
                     <span class="syntax-keyword">const</span> response = <span class="syntax-keyword">await</span> <span
-                        class="syntax-keyword">fetch</span>(`http://localhost:8000/v1/jobs/${jobId}`, {
+                        class="syntax-keyword">fetch</span>(`https://colorforge-api.deno.dev/v1/jobs/${jobId}`, {
                     <span class="syntax-keyword">method:</span> <span class="syntax-string">'GET'</span>,
                     <span class="syntax-keyword">headers:</span> {
                     <span class="syntax-string">'X-OpenAI-Key'</span>: <span class="syntax-string">'YOUR_API_KEY'</span>
