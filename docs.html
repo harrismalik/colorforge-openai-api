@@ -1,0 +1,1502 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>ColorForge API Documentation</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg-primary: #0d1117;
+            --bg-secondary: #161b22;
+            --bg-tertiary: #21262d;
+            --bg-code: #0d1117;
+            --border-primary: #30363d;
+            --border-muted: #21262d;
+            --text-primary: #e6edf3;
+            --text-secondary: #7d8590;
+            --text-accent: #58a6ff;
+            --text-success: #3fb950;
+            --text-warning: #d29922;
+            --text-danger: #f85149;
+            --accent-primary: #238636;
+            --accent-hover: #2ea043;
+            --radius: 6px;
+            --shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans", Helvetica, Arial, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.5;
+            font-size: 14px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 16px;
+        }
+
+        .header {
+            border-bottom: 1px solid var(--border-primary);
+            padding: 16px 0;
+            margin-bottom: 24px;
+        }
+
+        .header h1 {
+            font-size: 24px;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .header p {
+            color: var(--text-secondary);
+            margin-top: 4px;
+        }
+
+        .config-panel {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-primary);
+            border-radius: var(--radius);
+            padding: 16px;
+            margin-bottom: 24px;
+        }
+
+        .config-grid {
+            display: grid;
+            grid-template-columns: 1fr 200px;
+            gap: 12px;
+            align-items: end;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-label {
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--text-secondary);
+            margin-bottom: 6px;
+        }
+
+        .form-input {
+            background: var(--bg-primary);
+            border: 1px solid var(--border-primary);
+            border-radius: var(--radius);
+            padding: 8px 12px;
+            color: var(--text-primary);
+            font-family: ui-monospace, SFMono-Regular, "SF Mono", Monaco, Inconsolata, "Roboto Mono", monospace;
+            font-size: 14px;
+            transition: border-color 0.2s;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: var(--text-accent);
+            box-shadow: 0 0 0 3px rgba(88, 166, 255, 0.1);
+        }
+
+        .btn {
+            background: var(--accent-primary);
+            color: white;
+            border: none;
+            border-radius: var(--radius);
+            padding: 8px 16px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            white-space: nowrap;
+        }
+
+        .btn:hover {
+            background: var(--accent-hover);
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .endpoint {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-primary);
+            border-radius: var(--radius);
+            margin-bottom: 16px;
+            overflow: hidden;
+        }
+
+        .endpoint-header {
+            background: var(--bg-tertiary);
+            padding: 12px 16px;
+            border-bottom: 1px solid var(--border-primary);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            user-select: none;
+        }
+
+        .endpoint-header:hover {
+            background: #2d333b;
+        }
+
+        .endpoint-title {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .method-tag {
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-size: 11px;
+            font-weight: 600;
+            font-family: ui-monospace, monospace;
+        }
+
+        .method-get {
+            background: var(--text-success);
+            color: white;
+        }
+
+        .method-post {
+            background: var(--text-accent);
+            color: white;
+        }
+
+        .chevron {
+            transition: transform 0.2s;
+        }
+
+        .endpoint.open .chevron {
+            transform: rotate(90deg);
+        }
+
+        .endpoint-content {
+            display: none;
+            padding: 16px;
+        }
+
+        .endpoint.open .endpoint-content {
+            display: block;
+        }
+
+        .tabs {
+            display: flex;
+            border-bottom: 1px solid var(--border-primary);
+            margin-bottom: 16px;
+        }
+
+        .tab {
+            padding: 8px 16px;
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            cursor: pointer;
+            font-size: 14px;
+            border-bottom: 2px solid transparent;
+            transition: all 0.2s;
+        }
+
+        .tab:hover {
+            color: var(--text-primary);
+        }
+
+        .tab.active {
+            color: var(--text-accent);
+            border-bottom-color: var(--text-accent);
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .test-form {
+            display: grid;
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 100px 1fr;
+            gap: 12px;
+            align-items: center;
+        }
+
+        .form-textarea {
+            background: var(--bg-primary);
+            border: 1px solid var(--border-primary);
+            border-radius: var(--radius);
+            padding: 8px 12px;
+            color: var(--text-primary);
+            font-family: ui-monospace, monospace;
+            font-size: 13px;
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .form-select {
+            background: var(--bg-primary);
+            border: 1px solid var(--border-primary);
+            border-radius: var(--radius);
+            padding: 8px 12px;
+            color: var(--text-primary);
+            font-size: 14px;
+        }
+
+        .code-block {
+            background: var(--bg-code);
+            border: 1px solid var(--border-primary);
+            border-radius: var(--radius);
+            padding: 16px;
+            font-family: ui-monospace, monospace;
+            font-size: 13px;
+            line-height: 1.4;
+            overflow-x: auto;
+            position: relative;
+        }
+
+        .code-header {
+            display: flex;
+            justify-content: between;
+            align-items: center;
+            margin-bottom: 12px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid var(--border-muted);
+        }
+
+        .code-lang {
+            font-size: 11px;
+            color: var(--text-secondary);
+            font-weight: 600;
+        }
+
+        .copy-btn {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border-primary);
+            border-radius: 4px;
+            padding: 4px 8px;
+            color: var(--text-secondary);
+            font-size: 11px;
+            cursor: pointer;
+            opacity: 0;
+            transition: opacity 0.2s;
+        }
+
+        .code-block:hover .copy-btn {
+            opacity: 1;
+        }
+
+        .copy-btn:hover {
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+        }
+
+        .output {
+            background: var(--bg-primary);
+            border: 1px solid var(--border-primary);
+            border-radius: var(--radius);
+            padding: 16px;
+            font-family: ui-monospace, monospace;
+            font-size: 13px;
+            white-space: pre-wrap;
+            overflow-x: auto;
+            margin-top: 12px;
+            min-height: 60px;
+        }
+
+        .output.loading {
+            color: var(--text-secondary);
+        }
+
+        .output.error {
+            color: var(--text-danger);
+            border-color: var(--text-danger);
+        }
+
+        .output img {
+            max-width: 100%;
+            border-radius: var(--radius);
+            margin: 8px 0;
+            display: block;
+        }
+
+        .code-block pre {
+            margin: 0;
+            white-space: pre;
+            overflow-x: auto;
+        }
+
+        .syntax-keyword {
+            color: #ff7b72;
+        }
+
+        .syntax-string {
+            color: #a5d6ff;
+        }
+
+        .syntax-number {
+            color: #79c0ff;
+        }
+
+        .syntax-comment {
+            color: var(--text-secondary);
+        }
+
+        @media (max-width: 768px) {
+            .config-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <header class="header">
+        <h1>ColorForge API Documentation</h1>
+        <p>Interactive documentation and testing interface for the ColorForge image processing API</p>
+    </header>
+
+    <div class="config-panel">
+        <div class="config-grid">
+            <div class="form-group">
+                <label class="form-label">API Configuration</label>
+                <input type="password" id="apiKey" class="form-input" placeholder="OpenAI API Key (sk-...)"/>
+            </div>
+            <div class="form-group">
+                <label class="form-label">Base URL</label>
+                <input type="text" id="baseUrl" class="form-input" value="http://localhost:8000"/>
+            </div>
+        </div>
+    </div>
+
+    <!-- Ping Endpoint -->
+    <div class="endpoint" id="ping-endpoint">
+        <div class="endpoint-header" onclick="toggleEndpoint('ping-endpoint')">
+            <div class="endpoint-title">
+                <span class="method-tag method-get">GET</span>
+                <span>/v1/ping</span>
+            </div>
+            <span class="chevron">▶</span>
+        </div>
+        <div class="endpoint-content">
+            <div class="tabs">
+                <button class="tab active" onclick="switchTab('ping', 'test')">Test</button>
+                <button class="tab" onclick="switchTab('ping', 'curl')">cURL</button>
+                <button class="tab" onclick="switchTab('ping', 'js')">JavaScript</button>
+                <button class="tab" onclick="switchTab('ping', 'ts')">TypeScript</button>
+            </div>
+
+            <div class="tab-content active" id="ping-test">
+                <button class="btn" onclick="callApi('ping')">Test Endpoint</button>
+                <div class="output" id="pingOutput">Click "Test Endpoint" to check server status</div>
+            </div>
+
+            <div class="tab-content" id="ping-curl">
+                <div class="code-block">
+                    <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                    <div class="code-header">
+                        <span class="code-lang">CURL</span>
+                    </div>
+                    <span class="syntax-keyword">curl</span> -X GET \
+                    <span class="syntax-string">"http://localhost:8000/v1/ping"</span> \
+                    -H <span class="syntax-string">"X-OpenAI-Key: YOUR_API_KEY"</span>
+                </div>
+            </div>
+
+            <div class="tab-content" id="ping-js">
+                <div class="code-block">
+                    <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                    <div class="code-header">
+                        <span class="code-lang">JAVASCRIPT</span>
+                    </div>
+                    <pre><span class="syntax-keyword">const</span> response = <span class="syntax-keyword">await</span> fetch(<span
+                            class="syntax-string">'http://localhost:8000/v1/ping'</span>, {
+  method: <span class="syntax-string">'GET'</span>,
+  headers: {
+    <span class="syntax-string">'X-OpenAI-Key'</span>: <span class="syntax-string">'YOUR_API_KEY'</span>
+  }
+});
+
+<span class="syntax-keyword">const</span> data = <span class="syntax-keyword">await</span> response.json();
+console.log(data);</pre>
+                </div>
+            </div>
+
+            <div class="tab-content" id="ping-ts">
+                <div class="code-block">
+                    <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                    <div class="code-header">
+                        <span class="code-lang">TYPESCRIPT</span>
+                    </div>
+                    <pre><span class="syntax-keyword">interface</span> PingResponse {
+  status: <span class="syntax-keyword">string</span>;
+  timestamp: <span class="syntax-keyword">string</span>;
+}
+
+<span class="syntax-keyword">const</span> response = <span class="syntax-keyword">await</span> fetch(<span
+                                class="syntax-string">'http://localhost:8000/v1/ping'</span>, {
+  method: <span class="syntax-string">'GET'</span>,
+  headers: {
+    <span class="syntax-string">'X-OpenAI-Key'</span>: <span class="syntax-string">'YOUR_API_KEY'</span>
+  }
+});
+
+<span class="syntax-keyword">const</span> data: PingResponse = <span class="syntax-keyword">await</span> response.json();</pre>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Generate Endpoint -->
+    <div class="endpoint" id="generate-endpoint">
+        <div class="endpoint-header" onclick="toggleEndpoint('generate-endpoint')">
+            <div class="endpoint-title">
+                <span class="method-tag method-post">POST</span>
+                <span>/v1/generate</span>
+            </div>
+            <span class="chevron">▶</span>
+        </div>
+        <div class="endpoint-content">
+            <div class="tabs">
+                <button class="tab active" onclick="switchTab('generate', 'test')">Test</button>
+                <button class="tab" onclick="switchTab('generate', 'curl')">cURL</button>
+                <button class="tab" onclick="switchTab('generate', 'js')">JavaScript</button>
+                <button class="tab" onclick="switchTab('generate', 'ts')">TypeScript</button>
+            </div>
+
+            <div class="tab-content active" id="generate-test">
+                <div class="test-form">
+                    <div class="form-row">
+                        <label class="form-label">Prompt</label>
+                        <input type="text" id="genPrompt" class="form-input" value="A sunset over mountains"/>
+                    </div>
+                    <div class="form-row">
+                        <label class="form-label">Size</label>
+                        <select id="genSize" class="form-select">
+                            <option>256x256</option>
+                            <option>512x512</option>
+                            <option selected>1024x1024</option>
+                        </select>
+                    </div>
+                    <div class="form-row">
+                        <label class="form-label">Count</label>
+                        <input type="number" id="genN" class="form-input" value="1" min="1" max="4"/>
+                    </div>
+                </div>
+                <button class="btn" onclick="callApi('generate')">Generate Image</button>
+                <div class="output" id="generateOutput">Configure parameters and click "Generate Image"</div>
+            </div>
+
+            <div class="tab-content" id="generate-curl">
+                <div class="code-block">
+                    <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                    <div class="code-header">
+                        <span class="code-lang">CURL</span>
+                    </div>
+                    <span class="syntax-keyword">curl</span> -X POST \
+                    <span class="syntax-string">"http://localhost:8000/v1/generate"</span> \
+                    -H <span class="syntax-string">"Content-Type: application/json"</span> \
+                    -H <span class="syntax-string">"X-OpenAI-Key: YOUR_API_KEY"</span> \
+                    -d <span class="syntax-string">'{
+    "prompt": "A sunset over mountains",
+    "size": "1024x1024",
+    "n": 1
+  }'</span>
+                </div>
+            </div>
+
+            <div class="tab-content" id="generate-js">
+                <div class="code-block">
+                    <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                    <div class="code-header">
+                        <span class="code-lang">JAVASCRIPT</span>
+                    </div>
+                    <pre><span class="syntax-keyword">const</span> response = <span class="syntax-keyword">await</span> fetch(<span
+                            class="syntax-string">'http://localhost:8000/v1/generate'</span>, {
+  method: <span class="syntax-string">'POST'</span>,
+  headers: {
+    <span class="syntax-string">'Content-Type'</span>: <span class="syntax-string">'application/json'</span>,
+    <span class="syntax-string">'X-OpenAI-Key'</span>: <span class="syntax-string">'YOUR_API_KEY'</span>
+  },
+  body: JSON.stringify({
+    prompt: <span class="syntax-string">'A sunset over mountains'</span>,
+    size: <span class="syntax-string">'1024x1024'</span>,
+    n: <span class="syntax-number">1</span>
+  })
+});
+
+<span class="syntax-keyword">const</span> data = <span class="syntax-keyword">await</span> response.json();
+console.log(data.results);</pre>
+                </div>
+            </div>
+
+            <div class="tab-content" id="generate-ts">
+                <div class="code-block">
+                    <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                    <div class="code-header">
+                        <span class="code-lang">TYPESCRIPT</span>
+                    </div>
+                    <pre><span class="syntax-keyword">interface</span> GenerateRequest {
+  prompt: <span class="syntax-keyword">string</span>;
+  size: <span class="syntax-string">'256x256'</span> | <span class="syntax-string">'512x512'</span> | <span
+                                class="syntax-string">'1024x1024'</span>;
+  n: <span class="syntax-keyword">number</span>;
+}
+
+<span class="syntax-keyword">interface</span> GenerateResponse {
+  results: Array&lt;{ image: <span class="syntax-keyword">string</span> }&gt;;
+}
+
+<span class="syntax-keyword">const</span> payload: GenerateRequest = {
+  prompt: <span class="syntax-string">'A sunset over mountains'</span>,
+  size: <span class="syntax-string">'1024x1024'</span>,
+  n: <span class="syntax-number">1</span>
+};
+
+<span class="syntax-keyword">const</span> response = <span class="syntax-keyword">await</span> fetch(<span
+                                class="syntax-string">'http://localhost:8000/v1/generate'</span>, {
+  method: <span class="syntax-string">'POST'</span>,
+  headers: {
+    <span class="syntax-string">'Content-Type'</span>: <span class="syntax-string">'application/json'</span>,
+    <span class="syntax-string">'X-OpenAI-Key'</span>: <span class="syntax-string">'YOUR_API_KEY'</span>
+  },
+  body: JSON.stringify(payload)
+});
+
+<span class="syntax-keyword">const</span> data: GenerateResponse = <span class="syntax-keyword">await</span> response.json();</pre>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit Endpoint -->
+    <div class="endpoint" id="edit-endpoint">
+        <div class="endpoint-header" onclick="toggleEndpoint('edit-endpoint')">
+            <div class="endpoint-title">
+                <span class="method-tag method-post">POST</span>
+                <span>/v1/edit</span>
+            </div>
+            <span class="chevron">▶</span>
+        </div>
+        <div class="endpoint-content">
+            <div class="tabs">
+                <button class="tab active" onclick="switchTab('edit', 'test')">Test</button>
+                <button class="tab" onclick="switchTab('edit', 'curl')">cURL</button>
+                <button class="tab" onclick="switchTab('edit', 'js')">JavaScript</button>
+                <button class="tab" onclick="switchTab('edit', 'ts')">TypeScript</button>
+            </div>
+
+            <div class="tab-content active" id="edit-test">
+                <div class="test-form">
+                    <div class="form-row">
+                        <label class="form-label">Image URL</label>
+                        <input type="text" id="editImageUrl" class="form-input"
+                               value="https://upload.wikimedia.org/wikipedia/commons/9/99/Sample_User_Icon.png"/>
+                    </div>
+                    <div class="form-row">
+                        <label class="form-label">Prompt</label>
+                        <input type="text" id="editPrompt" class="form-input" value="Make background green"/>
+                    </div>
+                </div>
+                <button class="btn" onclick="callApi('edit')">Edit Image</button>
+                <div class="output" id="editOutput">Provide an image URL and edit prompt</div>
+            </div>
+
+            <div class="tab-content" id="edit-curl">
+                <div class="code-block">
+                    <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                    <div class="code-header">
+                        <span class="code-lang">CURL</span>
+                    </div>
+                    <span class="syntax-keyword">curl</span> -X POST \
+                    <span class="syntax-string">"http://localhost:8000/v1/edit"</span> \
+                    -H <span class="syntax-string">"Content-Type: application/json"</span> \
+                    -H <span class="syntax-string">"X-OpenAI-Key: YOUR_API_KEY"</span> \
+                    -d <span class="syntax-string">'{
+    "imageUrl": "https://example.com/image.png",
+    "prompt": "Make background green"
+  }'</span>
+                </div>
+            </div>
+
+            <div class="tab-content" id="edit-js">
+                <div class="code-block">
+                    <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                    <div class="code-header">
+                        <span class="code-lang">JAVASCRIPT</span>
+                    </div>
+                    <span class="syntax-keyword">const</span> response = <span class="syntax-keyword">await</span> <span
+                        class="syntax-keyword">fetch</span>(<span
+                        class="syntax-string">'http://localhost:8000/v1/edit'</span>, {
+                    <span class="syntax-keyword">method:</span> <span class="syntax-string">'POST'</span>,
+                    <span class="syntax-keyword">headers:</span> {
+                    <span class="syntax-string">'Content-Type'</span>: <span
+                        class="syntax-string">'application/json'</span>,
+                    <span class="syntax-string">'X-OpenAI-Key'</span>: <span class="syntax-string">'YOUR_API_KEY'</span>
+                    },
+                    <span class="syntax-keyword">body:</span> JSON.stringify({
+                    <span class="syntax-keyword">imageUrl:</span> <span class="syntax-string">'https://example.com/image.png'</span>,
+                    <span class="syntax-keyword">prompt:</span> <span
+                        class="syntax-string">'Make background green'</span>
+                    })
+                    });
+
+                    <span class="syntax-keyword">const</span> data = <span class="syntax-keyword">await</span>
+                    response.json();
+                </div>
+            </div>
+
+            <div class="tab-content" id="edit-ts">
+                <div class="code-block">
+                    <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                    <div class="code-header">
+                        <span class="code-lang">TYPESCRIPT</span>
+                    </div>
+                    <span class="syntax-keyword">interface</span> EditRequest {
+                    imageUrl: <span class="syntax-keyword">string</span>;
+                    prompt: <span class="syntax-keyword">string</span>;
+                    }
+
+                    <span class="syntax-keyword">interface</span> EditResponse {
+                    result: { image: <span class="syntax-keyword">string</span> };
+                    }
+
+                    <span class="syntax-keyword">const</span> payload: EditRequest = {
+                    <span class="syntax-keyword">imageUrl:</span> <span class="syntax-string">'https://example.com/image.png'</span>,
+                    <span class="syntax-keyword">prompt:</span> <span
+                        class="syntax-string">'Make background green'</span>
+                    };
+
+                    <span class="syntax-keyword">const</span> response = <span class="syntax-keyword">await</span> <span
+                        class="syntax-keyword">fetch</span>(<span
+                        class="syntax-string">'http://localhost:8000/v1/edit'</span>, {
+                    <span class="syntax-keyword">method:</span> <span class="syntax-string">'POST'</span>,
+                    <span class="syntax-keyword">headers:</span> {
+                    <span class="syntax-string">'Content-Type'</span>: <span
+                        class="syntax-string">'application/json'</span>,
+                    <span class="syntax-string">'X-OpenAI-Key'</span>: <span class="syntax-string">'YOUR_API_KEY'</span>
+                    },
+                    <span class="syntax-keyword">body:</span> JSON.stringify(payload)
+                    });
+
+                    <span class="syntax-keyword">const</span> data: EditResponse = <span
+                        class="syntax-keyword">await</span> response.json();
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Recolor Endpoint -->
+    <div class="endpoint" id="recolor-endpoint">
+        <div class="endpoint-header" onclick="toggleEndpoint('recolor-endpoint')">
+            <div class="endpoint-title">
+                <span class="method-tag method-post">POST</span>
+                <span>/v1/recolor</span>
+            </div>
+            <span class="chevron">▶</span>
+        </div>
+        <div class="endpoint-content">
+            <div class="tabs">
+                <button class="tab active" onclick="switchTab('recolor', 'test')">Test</button>
+                <button class="tab" onclick="switchTab('recolor', 'curl')">cURL</button>
+                <button class="tab" onclick="switchTab('recolor', 'js')">JavaScript</button>
+                <button class="tab" onclick="switchTab('recolor', 'ts')">TypeScript</button>
+            </div>
+
+            <div class="tab-content active" id="recolor-test">
+                <div class="test-form">
+                    <div class="form-row">
+                        <label class="form-label">Image URL</label>
+                        <input type="text" id="recolorImageUrl" class="form-input"/>
+                    </div>
+                    <div class="form-row">
+                        <label class="form-label">Colors</label>
+                        <input type="text" id="recolorColors" class="form-input" value="#f0e68c, #ffffff, #b0c4de"
+                               placeholder="Comma-separated hex colors"/>
+                    </div>
+                </div>
+                <button class="btn" onclick="callApi('recolor')">Recolor Image</button>
+                <div class="output" id="recolorOutput">Provide image URL and color palette</div>
+            </div>
+
+            <div class="tab-content" id="recolor-curl">
+                <div class="code-block">
+                    <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                    <div class="code-header">
+                        <span class="code-lang">CURL</span>
+                    </div>
+                    <span class="syntax-keyword">curl</span> -X POST \
+                    <span class="syntax-string">"http://localhost:8000/v1/recolor"</span> \
+                    -H <span class="syntax-string">"Content-Type: application/json"</span> \
+                    -H <span class="syntax-string">"X-OpenAI-Key: YOUR_API_KEY"</span> \
+                    -d <span class="syntax-string">'{
+    "imageUrl": "https://example.com/image.png",
+    "colors": ["#f0e68c", "#ffffff", "#b0c4de"]
+  }'</span>
+                </div>
+            </div>
+
+            <div class="tab-content" id="recolor-js">
+                <div class="code-block">
+                    <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                    <div class="code-header">
+                        <span class="code-lang">JAVASCRIPT</span>
+                    </div>
+                    <span class="syntax-keyword">const</span> response = <span class="syntax-keyword">await</span> <span
+                        class="syntax-keyword">fetch</span>(<span class="syntax-string">'http://localhost:8000/v1/recolor'</span>,
+                    {
+                    <span class="syntax-keyword">method:</span> <span class="syntax-string">'POST'</span>,
+                    <span class="syntax-keyword">headers:</span> {
+                    <span class="syntax-string">'Content-Type'</span>: <span
+                        class="syntax-string">'application/json'</span>,
+                    <span class="syntax-string">'X-OpenAI-Key'</span>: <span class="syntax-string">'YOUR_API_KEY'</span>
+                    },
+                    <span class="syntax-keyword">body:</span> JSON.stringify({
+                    <span class="syntax-keyword">imageUrl:</span> <span class="syntax-string">'https://example.com/image.png'</span>,
+                    <span class="syntax-keyword">colors:</span> [<span class="syntax-string">'#f0e68c'</span>, <span
+                        class="syntax-string">'#ffffff'</span>, <span class="syntax-string">'#b0c4de'</span>]
+                    })
+                    });
+
+                    <span class="syntax-keyword">const</span> data = <span class="syntax-keyword">await</span>
+                    response.json();
+                </div>
+            </div>
+
+            <div class="tab-content" id="recolor-ts">
+                <div class="code-block">
+                    <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                    <div class="code-header">
+                        <span class="code-lang">TYPESCRIPT</span>
+                    </div>
+                    <span class="syntax-keyword">interface</span> RecolorRequest {
+                    imageUrl: <span class="syntax-keyword">string</span>;
+                    colors: <span class="syntax-keyword">string</span>[];
+                    }
+
+                    <span class="syntax-keyword">interface</span> RecolorResponse {
+                    result: { image: <span class="syntax-keyword">string</span> };
+                    }
+
+                    <span class="syntax-keyword">const</span> payload: RecolorRequest = {
+                    <span class="syntax-keyword">imageUrl:</span> <span class="syntax-string">'https://example.com/image.png'</span>,
+                    <span class="syntax-keyword">colors:</span> [<span class="syntax-string">'#f0e68c'</span>, <span
+                        class="syntax-string">'#ffffff'</span>, <span class="syntax-string">'#b0c4de'</span>]
+                    };
+
+                    <span class="syntax-keyword">const</span> response = <span class="syntax-keyword">await</span> <span
+                        class="syntax-keyword">fetch</span>(<span class="syntax-string">'http://localhost:8000/v1/recolor'</span>,
+                    {
+                    <span class="syntax-keyword">method:</span> <span class="syntax-string">'POST'</span>,
+                    <span class="syntax-keyword">headers:</span> {
+                    <span class="syntax-string">'Content-Type'</span>: <span
+                        class="syntax-string">'application/json'</span>,
+                    <span class="syntax-string">'X-OpenAI-Key'</span>: <span class="syntax-string">'YOUR_API_KEY'</span>
+                    },
+                    <span class="syntax-keyword">body:</span> JSON.stringify(payload)
+                    });
+
+                    <span class="syntax-keyword">const</span> data: RecolorResponse = <span
+                        class="syntax-keyword">await</span> response.json();
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Visualize Endpoint -->
+    <div class="endpoint" id="visualize-endpoint">
+        <div class="endpoint-header" onclick="toggleEndpoint('visualize-endpoint')">
+            <div class="endpoint-title">
+                <span class="method-tag method-post">POST</span>
+                <span>/v1/visualize</span>
+            </div>
+            <span class="chevron">▶</span>
+        </div>
+        <div class="endpoint-content">
+            <div class="tabs">
+                <button class="tab active" onclick="switchTab('visualize', 'test')">Test</button>
+                <button class="tab" onclick="switchTab('visualize', 'curl')">cURL</button>
+                <button class="tab" onclick="switchTab('visualize', 'js')">JavaScript</button>
+                <button class="tab" onclick="switchTab('visualize', 'ts')">TypeScript</button>
+            </div>
+
+            <div class="tab-content active" id="visualize-test">
+                <div class="test-form">
+                    <div class="form-row">
+                        <label class="form-label">Image URL</label>
+                        <input type="text" id="visualImageUrl" class="form-input"/>
+                    </div>
+                    <div class="form-row">
+                        <label class="form-label">Palettes</label>
+                        <input type="text" id="visualPalette" class="form-input" value="#ff0000, #00ff00, #0000ff"
+                               placeholder="Comma-separated colors"/>
+                    </div>
+                </div>
+                <button class="btn" onclick="callApi('visualize')">Visualize Palette</button>
+                <div class="output" id="visualizeOutput">Provide image URL and color palette</div>
+            </div>
+
+            <div class="tab-content" id="visualize-curl">
+                <div class="code-block">
+                    <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                    <div class="code-header">
+                        <span class="code-lang">CURL</span>
+                    </div>
+                    <span class="syntax-keyword">curl</span> -X POST \
+                    <span class="syntax-string">"http://localhost:8000/v1/visualize"</span> \
+                    -H <span class="syntax-string">"Content-Type: application/json"</span> \
+                    -H <span class="syntax-string">"X-OpenAI-Key: YOUR_API_KEY"</span> \
+                    -d <span class="syntax-string">'{
+    "imageUrl": "https://example.com/image.png",
+    "palettes": ["#ff0000", "#00ff00", "#0000ff"]
+  }'</span>
+                </div>
+            </div>
+
+            <div class="tab-content" id="visualize-js">
+                <div class="code-block">
+                    <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                    <div class="code-header">
+                        <span class="code-lang">JAVASCRIPT</span>
+                    </div>
+                    <span class="syntax-keyword">const</span> response = <span class="syntax-keyword">await</span> <span
+                        class="syntax-keyword">fetch</span>(<span class="syntax-string">'http://localhost:8000/v1/visualize'</span>,
+                    {
+                    <span class="syntax-keyword">method:</span> <span class="syntax-string">'POST'</span>,
+                    <span class="syntax-keyword">headers:</span> {
+                    <span class="syntax-string">'Content-Type'</span>: <span
+                        class="syntax-string">'application/json'</span>,
+                    <span class="syntax-string">'X-OpenAI-Key'</span>: <span class="syntax-string">'YOUR_API_KEY'</span>
+                    },
+                    <span class="syntax-keyword">body:</span> JSON.stringify({
+                    <span class="syntax-keyword">imageUrl:</span> <span class="syntax-string">'https://example.com/image.png'</span>,
+                    <span class="syntax-keyword">palettes:</span> [<span class="syntax-string">'#ff0000'</span>, <span
+                        class="syntax-string">'#00ff00'</span>, <span class="syntax-string">'#0000ff'</span>]
+                    })
+                    });
+
+                    <span class="syntax-keyword">const</span> data = <span class="syntax-keyword">await</span>
+                    response.json();
+                </div>
+            </div>
+
+            <div class="tab-content" id="visualize-ts">
+                <div class="code-block">
+                    <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                    <div class="code-header">
+                        <span class="code-lang">TYPESCRIPT</span>
+                    </div>
+                    <span class="syntax-keyword">interface</span> VisualizeRequest {
+                    imageUrl: <span class="syntax-keyword">string</span>;
+                    palettes: <span class="syntax-keyword">string</span>[];
+                    }
+
+                    <span class="syntax-keyword">interface</span> VisualizeResponse {
+                    result: { image: <span class="syntax-keyword">string</span> };
+                    }
+
+                    <span class="syntax-keyword">const</span> payload: VisualizeRequest = {
+                    <span class="syntax-keyword">imageUrl:</span> <span class="syntax-string">'https://example.com/image.png'</span>,
+                    <span class="syntax-keyword">palettes:</span> [<span class="syntax-string">'#ff0000'</span>, <span
+                        class="syntax-string">'#00ff00'</span>, <span class="syntax-string">'#0000ff'</span>]
+                    };
+
+                    <span class="syntax-keyword">const</span> response = <span class="syntax-keyword">await</span> <span
+                        class="syntax-keyword">fetch</span>(<span class="syntax-string">'http://localhost:8000/v1/visualize'</span>,
+                    {
+                    <span class="syntax-keyword">method:</span> <span class="syntax-string">'POST'</span>,
+                    <span class="syntax-keyword">headers:</span> {
+                    <span class="syntax-string">'Content-Type'</span>: <span
+                        class="syntax-string">'application/json'</span>,
+                    <span class="syntax-string">'X-OpenAI-Key'</span>: <span class="syntax-string">'YOUR_API_KEY'</span>
+                    },
+                    <span class="syntax-keyword">body:</span> JSON.stringify(payload)
+                    });
+
+                    <span class="syntax-keyword">const</span> data: VisualizeResponse = <span class="syntax-keyword">await</span>
+                    response.json();
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Palettes Endpoint -->
+    <div class="endpoint" id="palettes-endpoint">
+        <div class="endpoint-header" onclick="toggleEndpoint('palettes-endpoint')">
+            <div class="endpoint-title">
+                <span class="method-tag method-get">GET</span>
+                <span>/v1/palettes</span>
+            </div>
+            <span class="chevron">▶</span>
+        </div>
+        <div class="endpoint-content">
+            <div class="tabs">
+                <button class="tab active" onclick="switchTab('palettes', 'test')">Test</button>
+                <button class="tab" onclick="switchTab('palettes', 'curl')">cURL</button>
+                <button class="tab" onclick="switchTab('palettes', 'js')">JavaScript</button>
+                <button class="tab" onclick="switchTab('palettes', 'ts')">TypeScript</button>
+            </div>
+
+            <div class="tab-content active" id="palettes-test">
+                <button class="btn" onclick="callApi('palettes')">Get Palettes</button>
+                <div class="output" id="palettesOutput">Click "Get Palettes" to retrieve available color palettes</div>
+            </div>
+
+            <div class="tab-content" id="palettes-curl">
+                <div class="code-block">
+                    <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                    <div class="code-header">
+                        <span class="code-lang">CURL</span>
+                    </div>
+                    <span class="syntax-keyword">curl</span> -X GET \
+                    <span class="syntax-string">"http://localhost:8000/v1/palettes"</span> \
+                    -H <span class="syntax-string">"X-OpenAI-Key: YOUR_API_KEY"</span>
+                </div>
+            </div>
+
+            <div class="tab-content" id="palettes-js">
+                <div class="code-block">
+                    <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                    <div class="code-header">
+                        <span class="code-lang">JAVASCRIPT</span>
+                    </div>
+                    <span class="syntax-keyword">const</span> response = <span class="syntax-keyword">await</span> <span
+                        class="syntax-keyword">fetch</span>(<span class="syntax-string">'http://localhost:8000/v1/palettes'</span>,
+                    {
+                    <span class="syntax-keyword">method:</span> <span class="syntax-string">'GET'</span>,
+                    <span class="syntax-keyword">headers:</span> {
+                    <span class="syntax-string">'X-OpenAI-Key'</span>: <span class="syntax-string">'YOUR_API_KEY'</span>
+                    }
+                    });
+
+                    <span class="syntax-keyword">const</span> data = <span class="syntax-keyword">await</span>
+                    response.json();
+                    console.log(data.palettes);
+                </div>
+            </div>
+
+            <div class="tab-content" id="palettes-ts">
+                <div class="code-block">
+                    <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                    <div class="code-header">
+                        <span class="code-lang">TYPESCRIPT</span>
+                    </div>
+                    <span class="syntax-keyword">interface</span> PalettesResponse {
+                    palettes: Array<{
+                    name: <span class="syntax-keyword">string</span>;
+                    colors: <span class="syntax-keyword">string</span>[];
+                    }>;
+                    }
+
+                    <span class="syntax-keyword">const</span> response = <span class="syntax-keyword">await</span> <span
+                        class="syntax-keyword">fetch</span>(<span class="syntax-string">'http://localhost:8000/v1/palettes'</span>,
+                    {
+                    <span class="syntax-keyword">method:</span> <span class="syntax-string">'GET'</span>,
+                    <span class="syntax-keyword">headers:</span> {
+                    <span class="syntax-string">'X-OpenAI-Key'</span>: <span class="syntax-string">'YOUR_API_KEY'</span>
+                    }
+                    });
+
+                    <span class="syntax-keyword">const</span> data: PalettesResponse = <span class="syntax-keyword">await</span>
+                    response.json();
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Batch Endpoint -->
+    <div class="endpoint" id="batch-endpoint">
+        <div class="endpoint-header" onclick="toggleEndpoint('batch-endpoint')">
+            <div class="endpoint-title">
+                <span class="method-tag method-post">POST</span>
+                <span>/v1/batch</span>
+            </div>
+            <span class="chevron">▶</span>
+        </div>
+        <div class="endpoint-content">
+            <div class="tabs">
+                <button class="tab active" onclick="switchTab('batch', 'test')">Test</button>
+                <button class="tab" onclick="switchTab('batch', 'curl')">cURL</button>
+                <button class="tab" onclick="switchTab('batch', 'js')">JavaScript</button>
+                <button class="tab" onclick="switchTab('batch', 'ts')">TypeScript</button>
+            </div>
+
+            <div class="tab-content active" id="batch-test">
+                <div class="test-form">
+                    <div class="form-row">
+                        <label class="form-label">Batch Jobs</label>
+                        <textarea id="batchJobs" class="form-textarea">{
+  "jobs": [
+    {
+      "endpoint": "/v1/palettes",
+      "payload": {}
+    },
+    {
+      "endpoint": "/v1/generate",
+      "payload": {
+        "prompt": "A serene landscape",
+        "size": "512x512",
+        "n": 1
+      }
+    }
+  ]
+}</textarea>
+                    </div>
+                </div>
+                <button class="btn" onclick="callApi('batch')">Submit Batch</button>
+                <div class="output" id="batchOutput">Configure batch jobs and submit</div>
+            </div>
+
+            <div class="tab-content" id="batch-curl">
+                <div class="code-block">
+                    <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                    <div class="code-header">
+                        <span class="code-lang">CURL</span>
+                    </div>
+                    <span class="syntax-keyword">curl</span> -X POST \
+                    <span class="syntax-string">"http://localhost:8000/v1/batch"</span> \
+                    -H <span class="syntax-string">"Content-Type: application/json"</span> \
+                    -H <span class="syntax-string">"X-OpenAI-Key: YOUR_API_KEY"</span> \
+                    -d <span class="syntax-string">'{
+    "jobs": [
+      {
+        "endpoint": "/v1/palettes",
+        "payload": {}
+      },
+      {
+        "endpoint": "/v1/generate",
+        "payload": {
+          "prompt": "A serene landscape",
+          "size": "512x512",
+          "n": 1
+        }
+      }
+    ]
+  }'</span>
+                </div>
+            </div>
+
+            <div class="tab-content" id="batch-js">
+                <div class="code-block">
+                    <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                    <div class="code-header">
+                        <span class="code-lang">JAVASCRIPT</span>
+                    </div>
+                    <span class="syntax-keyword">const</span> batchJobs = {
+                    <span class="syntax-keyword">jobs:</span> [
+                    {
+                    <span class="syntax-keyword">endpoint:</span> <span class="syntax-string">'/v1/palettes'</span>,
+                    <span class="syntax-keyword">payload:</span> {}
+                    },
+                    {
+                    <span class="syntax-keyword">endpoint:</span> <span class="syntax-string">'/v1/generate'</span>,
+                    <span class="syntax-keyword">payload:</span> {
+                    <span class="syntax-keyword">prompt:</span> <span class="syntax-string">'A serene landscape'</span>,
+                    <span class="syntax-keyword">size:</span> <span class="syntax-string">'512x512'</span>,
+                    <span class="syntax-keyword">n:</span> <span class="syntax-number">1</span>
+                    }
+                    }
+                    ]
+                    };
+
+                    <span class="syntax-keyword">const</span> response = <span class="syntax-keyword">await</span> <span
+                        class="syntax-keyword">fetch</span>(<span
+                        class="syntax-string">'http://localhost:8000/v1/batch'</span>, {
+                    <span class="syntax-keyword">method:</span> <span class="syntax-string">'POST'</span>,
+                    <span class="syntax-keyword">headers:</span> {
+                    <span class="syntax-string">'Content-Type'</span>: <span
+                        class="syntax-string">'application/json'</span>,
+                    <span class="syntax-string">'X-OpenAI-Key'</span>: <span class="syntax-string">'YOUR_API_KEY'</span>
+                    },
+                    <span class="syntax-keyword">body:</span> JSON.stringify(batchJobs)
+                    });
+
+                    <span class="syntax-keyword">const</span> data = <span class="syntax-keyword">await</span>
+                    response.json();
+                </div>
+            </div>
+
+            <div class="tab-content" id="batch-ts">
+                <div class="code-block">
+                    <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                    <div class="code-header">
+                        <span class="code-lang">TYPESCRIPT</span>
+                    </div>
+                    <span class="syntax-keyword">interface</span> BatchJob {
+                    endpoint: <span class="syntax-keyword">string</span>;
+                    payload: Record
+                    <string
+                    , <span class="syntax-keyword">any</span>>;
+                    }
+
+                    <span class="syntax-keyword">interface</span> BatchRequest {
+                    jobs: BatchJob[];
+                    }
+
+                    <span class="syntax-keyword">interface</span> BatchResponse {
+                    batchId: <span class="syntax-keyword">string</span>;
+                    status: <span class="syntax-keyword">string</span>;
+                    }
+
+                    <span class="syntax-keyword">const</span> batchRequest: BatchRequest = {
+                    <span class="syntax-keyword">jobs:</span> [
+                    {
+                    <span class="syntax-keyword">endpoint:</span> <span class="syntax-string">'/v1/palettes'</span>,
+                    <span class="syntax-keyword">payload:</span> {}
+                    },
+                    {
+                    <span class="syntax-keyword">endpoint:</span> <span class="syntax-string">'/v1/generate'</span>,
+                    <span class="syntax-keyword">payload:</span> {
+                    <span class="syntax-keyword">prompt:</span> <span class="syntax-string">'A serene landscape'</span>,
+                    <span class="syntax-keyword">size:</span> <span class="syntax-string">'512x512'</span> <span
+                        class="syntax-keyword">as const</span>,
+                    <span class="syntax-keyword">n:</span> <span class="syntax-number">1</span>
+                    }
+                    }
+                    ]
+                    };
+
+                    <span class="syntax-keyword">const</span> response = <span class="syntax-keyword">await</span> <span
+                        class="syntax-keyword">fetch</span>(<span
+                        class="syntax-string">'http://localhost:8000/v1/batch'</span>, {
+                    <span class="syntax-keyword">method:</span> <span class="syntax-string">'POST'</span>,
+                    <span class="syntax-keyword">headers:</span> {
+                    <span class="syntax-string">'Content-Type'</span>: <span
+                        class="syntax-string">'application/json'</span>,
+                    <span class="syntax-string">'X-OpenAI-Key'</span>: <span class="syntax-string">'YOUR_API_KEY'</span>
+                    },
+                    <span class="syntax-keyword">body:</span> JSON.stringify(batchRequest)
+                    });
+
+                    <span class="syntax-keyword">const</span> data: BatchResponse = <span
+                        class="syntax-keyword">await</span> response.json();
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Job Status Endpoint -->
+    <div class="endpoint" id="job-endpoint">
+        <div class="endpoint-header" onclick="toggleEndpoint('job-endpoint')">
+            <div class="endpoint-title">
+                <span class="method-tag method-get">GET</span>
+                <span>/v1/jobs/:jobId</span>
+            </div>
+            <span class="chevron">▶</span>
+        </div>
+        <div class="endpoint-content">
+            <div class="tabs">
+                <button class="tab active" onclick="switchTab('job', 'test')">Test</button>
+                <button class="tab" onclick="switchTab('job', 'curl')">cURL</button>
+                <button class="tab" onclick="switchTab('job', 'js')">JavaScript</button>
+                <button class="tab" onclick="switchTab('job', 'ts')">TypeScript</button>
+            </div>
+
+            <div class="tab-content active" id="job-test">
+                <div class="test-form">
+                    <div class="form-row">
+                        <label class="form-label">Job ID</label>
+                        <input type="text" id="jobIdInput" class="form-input" placeholder="job_abc123def456"/>
+                    </div>
+                </div>
+                <button class="btn" onclick="callApi('jobStatus')">Check Job Status</button>
+                <div class="output" id="jobStatusOutput">Enter job ID to check status</div>
+            </div>
+
+            <div class="tab-content" id="job-curl">
+                <div class="code-block">
+                    <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                    <div class="code-header">
+                        <span class="code-lang">CURL</span>
+                    </div>
+                    <span class="syntax-keyword">curl</span> -X GET \
+                    <span class="syntax-string">"http://localhost:8000/v1/jobs/job_abc123def456"</span> \
+                    -H <span class="syntax-string">"X-OpenAI-Key: YOUR_API_KEY"</span>
+                </div>
+            </div>
+
+            <div class="tab-content" id="job-js">
+                <div class="code-block">
+                    <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                    <div class="code-header">
+                        <span class="code-lang">JAVASCRIPT</span>
+                    </div>
+                    <span class="syntax-keyword">const</span> jobId = <span
+                        class="syntax-string">'job_abc123def456'</span>;
+
+                    <span class="syntax-keyword">const</span> response = <span class="syntax-keyword">await</span> <span
+                        class="syntax-keyword">fetch</span>(`http://localhost:8000/v1/jobs/${jobId}`, {
+                    <span class="syntax-keyword">method:</span> <span class="syntax-string">'GET'</span>,
+                    <span class="syntax-keyword">headers:</span> {
+                    <span class="syntax-string">'X-OpenAI-Key'</span>: <span class="syntax-string">'YOUR_API_KEY'</span>
+                    }
+                    });
+
+                    <span class="syntax-keyword">const</span> data = <span class="syntax-keyword">await</span>
+                    response.json();
+                    console.log(data.status, data.results);
+                </div>
+            </div>
+
+            <div class="tab-content" id="job-ts">
+                <div class="code-block">
+                    <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                    <div class="code-header">
+                        <span class="code-lang">TYPESCRIPT</span>
+                    </div>
+                    <span class="syntax-keyword">interface</span> JobStatusResponse {
+                    jobId: <span class="syntax-keyword">string</span>;
+                    status: <span class="syntax-string">'pending'</span> | <span
+                        class="syntax-string">'processing'</span> | <span class="syntax-string">'completed'</span> |
+                    <span class="syntax-string">'failed'</span>;
+                    results?: <span class="syntax-keyword">any</span>[];
+                    error?: <span class="syntax-keyword">string</span>;
+                    }
+
+                    <span class="syntax-keyword">const</span> jobId = <span
+                        class="syntax-string">'job_abc123def456'</span>;
+
+                    <span class="syntax-keyword">const</span> response = <span class="syntax-keyword">await</span> <span
+                        class="syntax-keyword">fetch</span>(`http://localhost:8000/v1/jobs/${jobId}`, {
+                    <span class="syntax-keyword">method:</span> <span class="syntax-string">'GET'</span>,
+                    <span class="syntax-keyword">headers:</span> {
+                    <span class="syntax-string">'X-OpenAI-Key'</span>: <span class="syntax-string">'YOUR_API_KEY'</span>
+                    }
+                    });
+
+                    <span class="syntax-keyword">const</span> data: JobStatusResponse = <span class="syntax-keyword">await</span>
+                    response.json();
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function toggleEndpoint(endpointId) {
+        const endpoint = document.getElementById(endpointId);
+        endpoint.classList.toggle('open');
+    }
+
+    function switchTab(endpointName, tabName) {
+        // Find the endpoint container
+        const endpointContainer = document.getElementById(`${endpointName}-endpoint`);
+        if (!endpointContainer) return;
+
+        // Hide all tabs for this endpoint
+        const tabs = endpointContainer.querySelectorAll('.tab');
+        tabs.forEach(tab => {
+            tab.classList.remove('active');
+        });
+
+        // Hide all tab contents for this endpoint
+        const tabContents = endpointContainer.querySelectorAll('.tab-content');
+        tabContents.forEach(content => {
+            content.classList.remove('active');
+        });
+
+        // Show selected tab and content
+        const selectedTab = endpointContainer.querySelector(`[onclick="switchTab('${endpointName}', '${tabName}')"]`);
+        const selectedContent = endpointContainer.querySelector(`#${endpointName}-${tabName}`);
+
+        if (selectedTab) selectedTab.classList.add('active');
+        if (selectedContent) selectedContent.classList.add('active');
+    }
+
+    function copyCode(button) {
+        const codeBlock = button.parentNode;
+        const code = codeBlock.textContent.replace('Copy', '').trim();
+
+        navigator.clipboard.writeText(code).then(() => {
+            const originalText = button.textContent;
+            button.textContent = 'Copied!';
+            button.style.color = 'var(--text-success)';
+
+            setTimeout(() => {
+                button.textContent = originalText;
+                button.style.color = '';
+            }, 2000);
+        });
+    }
+
+    async function callApi(type) {
+        const baseUrl = document.getElementById('baseUrl').value;
+        const apiKey = document.getElementById('apiKey').value;
+
+        if (!apiKey && type !== 'ping') {
+            alert('Please enter your OpenAI API key');
+            return;
+        }
+
+        const headers = {
+            'Content-Type': 'application/json'
+        };
+
+        if (apiKey) {
+            headers['X-OpenAI-Key'] = apiKey;
+        }
+
+        let url = '', method = 'POST', body = {}, outputEl;
+
+        switch (type) {
+            case 'ping':
+                url = `${baseUrl}/v1/ping`;
+                method = 'GET';
+                outputEl = document.getElementById('pingOutput');
+                break;
+
+            case 'generate':
+                url = `${baseUrl}/v1/generate`;
+                body = {
+                    prompt: document.getElementById('genPrompt').value,
+                    size: document.getElementById('genSize').value,
+                    n: Number(document.getElementById('genN').value)
+                };
+                outputEl = document.getElementById('generateOutput');
+                break;
+
+            case 'edit':
+                url = `${baseUrl}/v1/edit`;
+                body = {
+                    imageUrl: document.getElementById('editImageUrl').value,
+                    prompt: document.getElementById('editPrompt').value
+                };
+                outputEl = document.getElementById('editOutput');
+                break;
+
+            case 'recolor':
+                url = `${baseUrl}/v1/recolor`;
+                const colors = document.getElementById('recolorColors').value
+                    .split(',')
+                    .map(c => c.trim())
+                    .filter(c => c);
+                body = {
+                    imageUrl: document.getElementById('recolorImageUrl').value,
+                    colors: colors
+                };
+                outputEl = document.getElementById('recolorOutput');
+                break;
+
+            case 'visualize':
+                url = `${baseUrl}/v1/visualize`;
+                const palettes = document.getElementById('visualPalette').value
+                    .split(',')
+                    .map(c => c.trim())
+                    .filter(c => c);
+                body = {
+                    imageUrl: document.getElementById('visualImageUrl').value,
+                    palettes: palettes
+                };
+                outputEl = document.getElementById('visualizeOutput');
+                break;
+
+            case 'palettes':
+                url = `${baseUrl}/v1/palettes`;
+                method = 'GET';
+                outputEl = document.getElementById('palettesOutput');
+                break;
+
+            case 'batch':
+                url = `${baseUrl}/v1/batch`;
+                try {
+                    body = JSON.parse(document.getElementById('batchJobs').value);
+                } catch (e) {
+                    outputEl = document.getElementById('batchOutput');
+                    outputEl.innerHTML = 'Invalid JSON in batch jobs';
+                    outputEl.className = 'output error';
+                    return;
+                }
+                outputEl = document.getElementById('batchOutput');
+                break;
+
+            case 'jobStatus':
+                const jobId = document.getElementById('jobIdInput').value.trim();
+                if (!jobId) {
+                    alert('Please enter a job ID');
+                    return;
+                }
+                url = `${baseUrl}/v1/jobs/${jobId}`;
+                method = 'GET';
+                outputEl = document.getElementById('jobStatusOutput');
+                break;
+        }
+
+        outputEl.innerHTML = 'Loading...';
+        outputEl.className = 'output loading';
+
+        try {
+            const fetchOptions = {
+                method,
+                headers
+            };
+
+            if (method !== 'GET') {
+                fetchOptions.body = JSON.stringify(body);
+            }
+
+            const response = await fetch(url, fetchOptions);
+            const data = await response.json();
+
+            outputEl.className = 'output';
+
+            // Handle image responses
+            const images = [];
+            if (data.result?.image) images.push(data.result.image);
+            if (Array.isArray(data.results)) {
+                data.results.forEach(r => {
+                    if (r.image) images.push(r.image);
+                });
+            }
+            if (Array.isArray(data.variations)) {
+                data.variations.forEach(v => {
+                    if (v.image) images.push(v.image);
+                });
+            }
+
+            let output = '';
+            if (images.length > 0) {
+                output += images.map(img => `<img src="${img}" alt="Generated image" />`).join('');
+            }
+
+            output += `<pre>${JSON.stringify(data, null, 2)}</pre>`;
+            outputEl.innerHTML = output;
+
+        } catch (error) {
+            outputEl.innerHTML = `Error: ${error.message}`;
+            outputEl.className = 'output error';
+        }
+    }
+
+    // Auto-expand first endpoint on load
+    document.addEventListener('DOMContentLoaded', () => {
+        const firstEndpoint = document.getElementById('ping-endpoint');
+        if (firstEndpoint) {
+            firstEndpoint.classList.add('open');
+        }
+    });
+</script>
+</body>
+</html>
