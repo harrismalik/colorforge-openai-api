@@ -312,7 +312,7 @@ serve(async (req) => {
     try {
         const url = new URL(req.url);
         if (url.pathname === "/docs" && req.method === "GET") {
-            const html = await Deno.readTextFile("../docs.html");
+            const html = await Deno.readTextFile("./docs.html");
             return new Response(html, {
                 status: 200,
                 headers: {
