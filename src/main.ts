@@ -2,9 +2,6 @@
  * ColorForge - Deno Deploy server
  * Single-file implementation for RapidAPI listing / demo.
  *
- * Requirements:
- * - Set environment variable OPENAI_API_KEY in Deno Deploy secrets.
- *
  * Endpoints:
  * - GET  /v1/ping
  * - POST /v1/generate    { prompt, n, size }
@@ -314,6 +311,16 @@ serve(async (req) => {
     }
     try {
         const url = new URL(req.url);
+        if (url.pathname === "/docs" && req.method === "GET") {
+            const html = await Deno.readTextFile("../docs.html");
+            return new Response(html, {
+                status: 200,
+                headers: {
+                    "Content-Type": "text/html",
+                    ...CORS_HEADERS,
+                },
+            });
+        }
         if (url.pathname === "/v1/ping" && req.method === "GET") {
             return jsonResponse({ status: "ok", time: new Date().toISOString() });
         }
